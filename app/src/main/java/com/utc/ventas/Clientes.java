@@ -13,7 +13,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.utc.ventas.entidades.AdaptadorClientes;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 // GESTIONAR CLIENTES
 /*
@@ -27,9 +30,12 @@ public class Clientes extends AppCompatActivity {
     BaseDeDatos miBdd;
 
     ListView lista_clientes;
-    ArrayList<String> listaClientes = new ArrayList<>();
+
+    ArrayList<Cliente> arrayClientes = new ArrayList<Cliente>();
 
     Cursor clientesObtenidos;
+
+    AdaptadorClientes adaptadorClientes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,31 +55,14 @@ public class Clientes extends AppCompatActivity {
 
         consultarDatos();
 
-        lista_clientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                clientesObtenidos.moveToPosition(position);
-                String idCliente = clientesObtenidos.getString(0);
-                String cedulaCliente = clientesObtenidos.getString(1);
-                String apellidoCliente = clientesObtenidos.getString(2);
-                String nombreCliente = clientesObtenidos.getString(3);
-                String telefonoCliente = clientesObtenidos.getString(4);
-                String direccionCliente = clientesObtenidos.getString(5);
+    }
 
-                Intent gestion_cliente = new Intent(getApplicationContext(), EditarCliente.class);
-                gestion_cliente.putExtra("id", idCliente);
-                gestion_cliente.putExtra("cedula", cedulaCliente);
-                gestion_cliente.putExtra("apellido", apellidoCliente);
-                gestion_cliente.putExtra("nombre", nombreCliente);
-                gestion_cliente.putExtra("telefono", telefonoCliente);
-                gestion_cliente.putExtra("direccion", direccionCliente);
-                startActivity(gestion_cliente);
-                finish();
 
-            }
-        });
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        consultarDatos();
     }
 
     public void registrarCliente(View view){
@@ -123,25 +112,24 @@ public class Clientes extends AppCompatActivity {
         edt_apellido.setText("");
         edt_telefono.setText("");
         edt_direccion.setText("");
-        finish();
-
+        onBackPressed();
     }
 
-    public void consultarDatos(){
-        listaClientes.clear();
-        clientesObtenidos = miBdd.consultarClientes();
-        if(clientesObtenidos != null && clientesObtenidos.getCount() > 0) {
-            do{
-                String id = clientesObtenidos.getString(0).toString();
-                String apellido = clientesObtenidos.getString(2).toString();
-                String nombre = clientesObtenidos.getString(3).toString();
 
-                listaClientes.add("ID: " + id + "\nNombre: " + nombre + " " + apellido);
-                ArrayAdapter<String> adaptadorClientes = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaClientes);
-                lista_clientes.setAdapter(adaptadorClientes);
-            }while(clientesObtenidos.moveToNext());
-        }else{
-            Toast.makeText(getApplicationContext(), "No existen clientes registrados", Toast.LENGTH_SHORT).show();
+    public void consultarDatos() {
+        arrayClientes.clear();
+        clientesObtenidos = miBdd.consultarClientes();
+        if (clientesObtenidos != null && clientesObtenidos.getCount() > 0) {
+            clientesObtenidos.moveToFirst();
+            do {
+                int idCliente = clientesObtenidos.getInt(0);
+                String nombreCliente = clientesObtenidos.getString(3);
+                String apellidoCliente = clientesObtenidos.getString(2);
+                arrayClientes.add(new Cliente(idCliente, nombreCliente, apellidoCliente));
+            } while (clientesObtenidos.moveToNext());
+            adaptadorClientes = new AdaptadorClientes(this, arrayClientes, miBdd);
+            lista_clientes.setAdapter(adaptadorClientes);
         }
     }
+
 }

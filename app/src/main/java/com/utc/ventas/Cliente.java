@@ -11,6 +11,12 @@ public class Cliente {
 
     }
 
+    public Cliente(int idCliente, String nombreCliente, String apellidoCliente) {
+        this.idCliente = idCliente;
+        this.nombreCliente = nombreCliente;
+        this.apellidoCliente = apellidoCliente;
+    }
+
     public int getIdCliente(){
         return this.idCliente;
     }

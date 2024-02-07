@@ -63,7 +63,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="585dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="20dp">
 
@@ -78,7 +78,7 @@
                         android:id="@+id/edt_cedula"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                        android:inputType="numberDecimal"></com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -122,7 +122,7 @@
                         android:id="@+id/edt_telefono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                        android:inputType="phone"></com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -164,13 +164,23 @@
                         android:text="Cancelar"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"></Button>
+
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lista de Clientes"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"/>
 
                 <ListView
                     android:id="@+id/lista_clientes"
                     android:layout_width="match_parent"
-                    android:layout_height="158dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_height="500dp"
+                    android:layout_marginTop="20dp" />
 
             </LinearLayout>
 

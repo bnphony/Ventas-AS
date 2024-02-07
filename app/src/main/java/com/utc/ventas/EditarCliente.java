@@ -70,8 +70,6 @@ public class EditarCliente extends AppCompatActivity {
 
     public void volver(View view){
         finish();
-        Intent ventanaGestionClientes = new Intent(getApplicationContext(), Clientes.class);
-        startActivity(ventanaGestionClientes);
     }
 
     public void eliminarCliente(View view){

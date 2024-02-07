@@ -20,6 +20,7 @@ public class BaseDeDatos extends SQLiteOpenHelper {
     private static final String tablaProducto = "create table producto(id_prod integer primary key autoincrement, " +
             "nombre_prod text, descripcion_prod text, precio_prod real, iva_prod real, stock_prod real, f_caducidad_prod text);";
 
+
     private static final String tablaVenta = "create table venta(id_ven integer primary key autoincrement, " +
             "titulo_ven text, fecha_ven text, estado_ven text, total_ven real, observacion_ven text, " +
             "fk_cli_ven integer, foreign key(fk_cli_ven) references cliente(id_cli));";
@@ -61,6 +62,8 @@ public class BaseDeDatos extends SQLiteOpenHelper {
         db.execSQL(tablaProductosVendidos); // Ejecutar el codigo para crear la tabla Productos Vendidos
     }
 
+
+    /* USUARIO */
     // Proceso 3: Metodo para insertar datos dentro de la tabla usuario, retorna true cuando inserta o false cuando hay algun error
     public boolean agregarUsuario(String nombre, String nombre_usuario, String email, String password){
         SQLiteDatabase miBdd = getWritableDatabase(); // Llamar a la base de datos
@@ -85,29 +88,19 @@ public class BaseDeDatos extends SQLiteOpenHelper {
         }
     }
 
-    public boolean agregarCliente(String cedula, String apellido, String nombre, String telefono, String direccion){
-        SQLiteDatabase miBdd = getWritableDatabase();
-        if(miBdd != null){
-            miBdd.execSQL("insert into cliente(cedula_cli, apellido_cli, nombre_cli, telefono_cli, direccion_cli) values " +
-                    "('"+cedula+"', '"+apellido+"', '"+nombre+"', '"+telefono+"', '"+direccion+"');");
-            miBdd.close();
+    public boolean validarNombreUsuario(String nombre_usuario){
+        SQLiteDatabase nombreBdd = getReadableDatabase();
+        Cursor cursor = nombreBdd.rawQuery("select nombre_usuario_usu from usuario " +
+                "where nombre_usuario_usu = '"+nombre_usuario+"';", null);
+        if(cursor.moveToFirst()){
+            nombreBdd.close();
             return true;
         }
-        return false; // Retorno en el caso de errores con la base de datos
+        return false;
     }
 
-    public Cursor consultarClientes(){
-        SQLiteDatabase miBdd = getWritableDatabase(); // Objeto para manejar la base de datos
-        // Consultar los clientes en el abase de datos y guardarlos en un cursor
-        Cursor clientes = miBdd.rawQuery("select * from cliente;", null);
-        if(clientes.moveToFirst()){
-            // Retornar el cursor que contiene el listado de cliente
-            miBdd.close();
-            return clientes;
-        }else{
-            return clientes; // Se retorna cuando no hay clientes dentro de la tabla clientes
-        }
-    }
+
+    /* PRODUCTO */
 
     public boolean registrarProducto(String nombre, String descripcion, double precio, double iva, double stock, String f_caducidad){
         SQLiteDatabase miBdd = getWritableDatabase(); // Crear un objeto de la base de datos
@@ -146,6 +139,67 @@ public class BaseDeDatos extends SQLiteOpenHelper {
         return id_maximo; // Retorna el proximo id
     }
 
+    public boolean actualizarProducto(String idProducto, String nombre, String descripcion, double precio, double iva, double stock, String f_caducidad){
+        SQLiteDatabase bdd = getWritableDatabase();
+        if(bdd != null){
+            bdd.execSQL("update producto set nombre_prod='"+nombre+"', descripcion_prod='"+descripcion+"', " +
+                    "precio_prod="+precio+", iva_prod="+iva+", stock_prod="+stock+", " +
+                    "f_caducidad_prod='"+f_caducidad+"' " +
+                    "where id_prod = " + idProducto);
+            bdd.close();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean eliminarProducto(String idProducto){
+        SQLiteDatabase bdd = getWritableDatabase();
+        if(bdd != null){
+            bdd.execSQL("delete from producto where id_prod = " + idProducto);
+            bdd.close();
+            return true;
+        }
+        return false;
+    }
+
+    public Cursor obtenerProducto(int idProducto) {
+        SQLiteDatabase miBdd = getReadableDatabase();
+        Cursor producto = miBdd.rawQuery("SELECT * FROM producto WHERE id_prod = " + idProducto, null);
+
+        if (producto.moveToFirst()) {
+            miBdd.close();
+            return producto;
+        }
+        return null;
+    }
+
+
+    /* CLIENTE */
+
+    public boolean agregarCliente(String cedula, String apellido, String nombre, String telefono, String direccion){
+        SQLiteDatabase miBdd = getWritableDatabase();
+        if(miBdd != null){
+            miBdd.execSQL("insert into cliente(cedula_cli, apellido_cli, nombre_cli, telefono_cli, direccion_cli) values " +
+                    "('"+cedula+"', '"+apellido+"', '"+nombre+"', '"+telefono+"', '"+direccion+"');");
+            miBdd.close();
+            return true;
+        }
+        return false; // Retorno en el caso de errores con la base de datos
+    }
+
+    public Cursor consultarClientes(){
+        SQLiteDatabase miBdd = getWritableDatabase(); // Objeto para manejar la base de datos
+        // Consultar los clientes en el abase de datos y guardarlos en un cursor
+        Cursor clientes = miBdd.rawQuery("select * from cliente;", null);
+        if(clientes.moveToFirst()){
+            // Retornar el cursor que contiene el listado de cliente
+            miBdd.close();
+            return clientes;
+        }else{
+            return clientes; // Se retorna cuando no hay clientes dentro de la tabla clientes
+        }
+    }
+
     public boolean actualizarCliente(String cedula, String apellido, String nombre, String telefono,
                                      String direccion, String id){
         SQLiteDatabase miBdd = getWritableDatabase(); // Objeto para manejar la base de datos
@@ -169,17 +223,18 @@ public class BaseDeDatos extends SQLiteOpenHelper {
         return false; // Se retorna cuando no existe la base de datos
     }
 
-    public boolean validarNombreUsuario(String nombre_usuario){
-        SQLiteDatabase nombreBdd = getReadableDatabase();
-        Cursor cursor = nombreBdd.rawQuery("select nombre_usuario_usu from usuario " +
-                "where nombre_usuario_usu = '"+nombre_usuario+"';", null);
-        if(cursor.moveToFirst()){
-            nombreBdd.close();
-            return true;
+    public Cursor obtenerCliente(int idCliente) {
+        SQLiteDatabase miBdd = getReadableDatabase();
+        Cursor cliente = miBdd.rawQuery("SELECT * FROM cliente WHERE id_cli = " + idCliente, null);
+        if (cliente.moveToFirst()) {
+            miBdd.close();
+            return cliente;
         }
-        return false;
+        return null;
     }
 
+
+    /* VENTAS */
 
     public int conseguirIdVenta(){
         SQLiteDatabase bdd = getReadableDatabase();
@@ -228,30 +283,6 @@ public class BaseDeDatos extends SQLiteOpenHelper {
         return false;
     }
 
-    public boolean actualizarProducto(String idProducto, String nombre, String descripcion, double precio, double iva, double stock, String f_caducidad){
-        SQLiteDatabase bdd = getWritableDatabase();
-        if(bdd != null){
-            bdd.execSQL("update producto set nombre_prod='"+nombre+"', descripcion_prod='"+descripcion+"', " +
-                    "precio_prod="+precio+", iva_prod="+iva+", stock_prod="+stock+", " +
-                    "f_caducidad_prod='"+f_caducidad+"' " +
-                    "where id_prod = " + idProducto);
-            bdd.close();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean eliminarProducto(String idProducto){
-        SQLiteDatabase bdd = getWritableDatabase();
-        if(bdd != null){
-            bdd.execSQL("delete from producto where id_prod = " + idProducto);
-            bdd.close();
-            return true;
-        }
-        return false;
-    }
-
-
     public Cursor consultarVentas(){
         SQLiteDatabase bdd = getReadableDatabase();
         if(bdd != null){
@@ -268,7 +299,6 @@ public class BaseDeDatos extends SQLiteOpenHelper {
         }
         return null;
     }
-
 
     public ArrayList<String> consultarProductosVendidos(String idVenta){
         SQLiteDatabase bdd = getReadableDatabase();
@@ -294,6 +324,8 @@ public class BaseDeDatos extends SQLiteOpenHelper {
         }
         return productos;
     }
+
+
 
 
 

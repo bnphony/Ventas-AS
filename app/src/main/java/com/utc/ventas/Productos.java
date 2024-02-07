@@ -1,13 +1,18 @@
 package com.utc.ventas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,8 +20,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.utc.ventas.entidades.Producto;
+import com.utc.ventas.entidades.RangoNumeros;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,12 +37,36 @@ public class Productos extends AppCompatActivity {
     // Instanciar los objetos necesarios para la clase
     TextView txt_id_prod;
     EditText edt_nombre_prod, edt_precio_prod, edt_iva_prod, edt_stock_prod, edt_f_caducidad_prod, edt_descripcion_prod;
-    ListView lista_productos;
     Button btn_fecha;
     int dia, mes, year; // Variables para almacenar la fecha
     // Intanciar un array para almacenar los registros consultados de la Base de Datos
     ArrayList<String> listaProductos = new ArrayList<>();
     BaseDeDatos bdd; // Instanciar un objeto de la clase de Base de Datos
+
+    // Salida
+    private TableLayout tbl_productos;
+    private TableRow fila;
+    private Button btn_editar_tabla;
+    int indexFila = -1;
+    private ArrayList<Producto> listaProductosTabla = new ArrayList<>();
+    private Cursor cursorTabla;
+
+    // Para la Fila entera
+    TableRow.LayoutParams layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+
+    // Para cada columna
+    TableRow.LayoutParams layoutNumFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+    TableRow.LayoutParams layoutNombre = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+    TableRow.LayoutParams layoutPrecio = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+    TableRow.LayoutParams layoutCantidad = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+    TableRow.LayoutParams layoutEditar = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+
+    // Columnas de la tabla
+    TextView txt_layoutNumFila, txt_layoutNombre, txt_layoutPrecio, txt_layoutCantidad, txt_layoutEditar;
+
+    // Colores
+    private int yellow_1;
+
 
     // Conseguir la fecha del sistema
     Date fecha = new Date();
@@ -55,11 +89,16 @@ public class Productos extends AppCompatActivity {
         edt_nombre_prod = (EditText) findViewById(R.id.edt_nombre_prod);
         edt_precio_prod = (EditText) findViewById(R.id.edt_precio_prod);
         edt_iva_prod = (EditText) findViewById(R.id.edt_iva_prod);
+        edt_iva_prod.setFilters(new InputFilter[] { new RangoNumeros(0.0, 100.0)});
         edt_stock_prod = (EditText) findViewById(R.id.edt_stock_prod);
         edt_f_caducidad_prod = (EditText) findViewById(R.id.edt_f_caducidad_prod);
         edt_descripcion_prod = (EditText) findViewById(R.id.edt_descripcion_prod);
         btn_fecha = (Button) findViewById(R.id.btn_fecha);
-        lista_productos = (ListView) findViewById(R.id.lista_productos);
+
+        yellow_1 = ContextCompat.getColor(Productos.this, R.color.yellow_1);
+
+        tbl_productos = (TableLayout) findViewById(R.id.tbl_productos);
+
         bdd = new BaseDeDatos(getApplicationContext());
         // Deshabilitar el EditText de la fecha de caducidad del producto
         //edt_f_caducidad_prod.setEnabled(false);
@@ -77,31 +116,9 @@ public class Productos extends AppCompatActivity {
         // Colocar el id del proximo registro en un TextView
         txt_id_prod.setText("ID Producto: " + bdd.conseguirIdProducto());
         // Llamar al metodo para consutlar los productos de la Base de Datos
-        consultarProductos();
 
-        lista_productos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                productos.moveToPosition(position);
-                String idProducto = productos.getString(0);
-                String nombreProducto = productos.getString(1);
-                String descripcionProducto = productos.getString(2);
-                double precioProducto = productos.getDouble(3);
-                double ivaProducto = productos.getDouble(4);
-                double stockProducto = productos.getDouble(5);
-                String f_caducidadProducto = productos.getString(6);
-
-                Intent gestion_productos = new Intent(getApplicationContext(), GestionProductos.class);
-                gestion_productos.putExtra("id", idProducto);
-                gestion_productos.putExtra("nombre", nombreProducto);
-                gestion_productos.putExtra("descripcion", descripcionProducto);
-                gestion_productos.putExtra("precio", precioProducto);
-                gestion_productos.putExtra("iva", ivaProducto);
-                gestion_productos.putExtra("stock", stockProducto);
-                gestion_productos.putExtra("f_caducidad", f_caducidadProducto);
-                startActivity(gestion_productos);
-            }
-        });
+        graficarEncabezadosTabla();
+        consultarProductosTabla();
     }
     // Proceso 1: Metodo para registrar los nuevos productos
     public void registrarProducto(View view){
@@ -135,7 +152,7 @@ public class Productos extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Nuevo Producto Registrado, Correctamente!", Toast.LENGTH_SHORT).show();
                         // Actualizar el ID del proximo registro
                         txt_id_prod.setText("ID Producto: " + bdd.conseguirIdProducto());
-                        consultarProductos(); // Actualizar la Lista de Productos
+                        consultarProductosTabla();
                     }else{
                         // Mostrar un mensaje de error en el EditText
                         edt_f_caducidad_prod.setError("La fecha debe ser mayor o igual a la fecha actual");
@@ -160,32 +177,9 @@ public class Productos extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        consultarProductos();
+        consultarProductosTabla();
     }
 
-    // Proceso 2: Metodo para consultar todos los productos de la Base de Datos
-    public void consultarProductos(){
-        listaProductos.clear(); // Limpiar todos lo datos que contenga la lista de productos
-        // Crear un objeto cursor para almacenar todos los productos obtenidos de la base de datos
-        productos = bdd.consultarProductos();
-        if(productos != null){ // Comprobar que se hayan encontrado registros en la Base de Datos
-            // Ciclo Do-While para llenar la lista con los registros encontrados en la Base de Datos
-            do{
-                String id = productos.getString(0);
-                String nombre = productos.getString(1);
-                double precio = productos.getDouble(3);
-                double stock = productos.getDouble(5);
-                listaProductos.add(id + "\nNombre: "+nombre+"\nPrecio: $ "+ precio + "\nStock: " + stock); // Agregar un registro a la Lista
-                // Asignar un formato y el contenido al Adaptador de la lista
-                ArrayAdapter<String> adaptadorProductos = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaProductos);
-                // Asignar el adaptador a la Lista de Productos
-                lista_productos.setAdapter(adaptadorProductos);
-            }while(productos.moveToNext()); // Condicion para recorrer el cursor
-        }else{
-            // Mensaje para informar que no se encontraron registros en el Cursor
-            Toast.makeText(getApplicationContext(), "No existen Productos registrados", Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
     // Proceso 5: Metodo para cerrar la Actividad
@@ -279,8 +273,6 @@ public class Productos extends AppCompatActivity {
 
 
     // Proceso 4: Metodo para seleccionar la fecha
-
-
     public void seleccionarFecha(View view){
         final Calendar c = Calendar.getInstance();
         dia = c.get(Calendar.DAY_OF_MONTH);
@@ -296,4 +288,117 @@ public class Productos extends AppCompatActivity {
         }, year, mes, dia);
         datePickerDialog.show();
     }
+
+
+    // Proceso 10: Consultar Datos para la TablaLayout
+    private void consultarProductosTabla() {
+        listaProductosTabla.clear();
+//        TableRow headerView = (TableRow) tbl_productos.getChildAt(0);
+        tbl_productos.removeAllViews();
+//        tbl_productos.addView(headerView);
+        graficarEncabezadosTabla();
+        cursorTabla = bdd.consultarProductos();
+        if (cursorTabla != null) {
+            do {
+                String id = cursorTabla.getString(0);
+                String nombre = cursorTabla.getString(1);
+                double precio = cursorTabla.getDouble(3);
+                double stock = cursorTabla.getDouble(5);
+                int cantidad = (int) stock;
+                listaProductosTabla.add(new Producto(Integer.parseInt(id), nombre, precio, cantidad));
+                fila = new TableRow(this);
+                fila.setBackgroundResource(R.drawable.fondo_fila);
+                fila.setLayoutParams(layoutFila);
+
+                txt_layoutNumFila = crearTextView(id, Color.BLACK, layoutNumFila);
+                fila.addView(txt_layoutNumFila);
+                txt_layoutNombre = crearTextView(nombre, Color.BLACK, layoutNombre);
+                fila.addView(txt_layoutNombre);
+
+                TableRow.LayoutParams paramsNombre = (TableRow.LayoutParams) txt_layoutNombre.getLayoutParams();
+                paramsNombre.weight = 1;
+                txt_layoutNombre.setLayoutParams(paramsNombre);
+                txt_layoutPrecio = crearTextView("$ " + String.valueOf(precio), Color.BLACK, layoutPrecio);
+                fila.addView(txt_layoutPrecio);
+                txt_layoutCantidad = crearTextView(String.valueOf(cantidad), Color.BLACK, layoutCantidad);
+                fila.addView(txt_layoutCantidad);
+
+                txt_layoutEditar = crearTextView("Editar", Color.BLACK, layoutEditar);
+                txt_layoutEditar.setBackgroundColor(yellow_1);
+                txt_layoutEditar.setId(Integer.parseInt(id));
+                fila.addView(txt_layoutEditar);
+                txt_layoutEditar.setOnClickListener(new ButtonsOnClickListener());
+                tbl_productos.addView(fila);
+
+            } while (cursorTabla.moveToNext());
+        } else {
+            Toast.makeText(getApplicationContext(), "No existen productos registrados!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Proceso 11: Graficar Encabezados de la Tabla
+    private void graficarEncabezadosTabla() {
+        fila = new TableRow(this);
+        fila.setBackgroundResource(R.drawable.fondo_app);
+        fila.setLayoutParams(layoutFila);
+
+        txt_layoutNumFila = crearTextView("N°", Color.BLACK, layoutNumFila);
+        fila.addView(txt_layoutNumFila);
+        txt_layoutNombre = crearTextView("Nombre", Color.BLACK, layoutNombre);
+        fila.addView(txt_layoutNombre);
+        txt_layoutPrecio = crearTextView("Precio", Color.BLACK, layoutPrecio);
+        fila.addView(txt_layoutPrecio);
+        txt_layoutCantidad = crearTextView("Uds.", Color.BLACK, layoutCantidad);
+        fila.addView(txt_layoutCantidad);
+
+        txt_layoutEditar = crearTextView("Editar", Color.BLACK, layoutEditar);
+        fila.addView(txt_layoutEditar);
+        tbl_productos.addView(fila);
+
+
+    }
+
+    // Proceso 12: Crear Elementos TextView
+    private TextView crearTextView(String contenido, int textColor, ViewGroup.LayoutParams layoutParams) {
+        TextView textView = new TextView(this);
+        textView.setText(contenido);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(18);
+        textView.setTextColor(textColor);
+        textView.setPadding(10, 20, 10, 20);
+        textView.setLayoutParams(layoutParams);
+        return textView;
+    }
+
+
+    // Proceso 13: Controlar cuando se da TAP al boton EDITAR de un registro de la tabla
+    class ButtonsOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View vista) {
+            TextView editar = (TextView) vista;
+            int id = editar.getId();
+            Cursor productoObtenido = bdd.obtenerProducto(id);
+            if (productoObtenido != null) {
+                String idProducto = productoObtenido.getString(0);
+                String nombreProducto = productoObtenido.getString(1);
+                String descripcionProducto = productoObtenido.getString(2);
+                double precioProducto = productoObtenido.getDouble(3);
+                double ivaProducto = productoObtenido.getDouble(4);
+                double stockProducto = productoObtenido.getDouble(5);
+                String f_caducidadProducto = productoObtenido.getString(6);
+
+                Intent gestion_productos = new Intent(getApplicationContext(), GestionProductos.class);
+                gestion_productos.putExtra("id", idProducto);
+                gestion_productos.putExtra("nombre", nombreProducto);
+                gestion_productos.putExtra("descripcion", descripcionProducto);
+                gestion_productos.putExtra("precio", precioProducto);
+                gestion_productos.putExtra("iva", ivaProducto);
+                gestion_productos.putExtra("stock", stockProducto);
+                gestion_productos.putExtra("f_caducidad", f_caducidadProducto);
+                startActivity(gestion_productos);
+            }
+        }
+    }
+
+
 }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -46,6 +47,7 @@ public class GestionProductos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_productos);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         edt_nombre_prod = (EditText) findViewById(R.id.edt_nombre_prod);
         edt_precio_prod = (EditText) findViewById(R.id.edt_precio_prod);

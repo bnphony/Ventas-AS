@@ -116,7 +116,7 @@
                     android:id="@+id/edt_precio_prod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                    android:inputType="numberDecimal"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -132,7 +132,7 @@
                     android:id="@+id/edt_iva_prod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                    android:inputType="numberDecimal"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -148,7 +148,7 @@
                     android:id="@+id/edt_stock_prod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                    android:inputType="numberDecimal"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
 

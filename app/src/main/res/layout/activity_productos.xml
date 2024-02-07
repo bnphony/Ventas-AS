@@ -116,7 +116,7 @@
                     android:id="@+id/edt_precio_prod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                    android:inputType="numberDecimal"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -132,7 +132,7 @@
                     android:id="@+id/edt_iva_prod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                    android:inputType="numberDecimal"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -148,7 +148,7 @@
                     android:id="@+id/edt_stock_prod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                    android:inputType="numberDecimal"></com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -221,14 +221,35 @@
                     android:textColor="#FFFFFF" />
             </LinearLayout>
 
-            <ListView
-                android:id="@+id/lista_productos"
+
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="121dp"
+                android:layout_height="wrap_content"
+                android:text="Lista de Productos"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:textColor="@color/orange_1"
+                android:layout_marginBottom="10dp"
+                />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:scrollbars="none"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="30dp"
-                android:paddingBottom="20dp" />
+                android:layout_marginRight="20dp">
+
+                <TableLayout
+                    android:id="@+id/tbl_productos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:isScrollContainer="true"
+                    android:stretchColumns="*"
+                    android:layout_marginBottom="20dp">
+
+                </TableLayout>
+            </ScrollView>
 
         </LinearLayout>
     </ScrollView>
