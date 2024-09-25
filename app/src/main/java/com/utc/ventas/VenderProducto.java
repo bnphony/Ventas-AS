@@ -20,15 +20,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.utc.ventas.entidades.Producto;
+import com.utc.ventas.entidades.VentaProductoAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /*
-* El adaptador para la lista de productos escogidos para la venta
-* */
+ * El adaptador para la lista de productos escogidos para la venta
+ * */
 
 public class VenderProducto extends DialogFragment {
-    final ArrayList<String> listaProductos = new ArrayList<>();
+    final ArrayList<Producto> listaProductos = new ArrayList<>();
     BaseDeDatos bdd;
     ListView lista_productos;
     Cursor productos;
@@ -44,12 +47,12 @@ public class VenderProducto extends DialogFragment {
 
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.vender_productos, null);
-        final EditText edt_cantidad =  (EditText)  view.findViewById(R.id.edt_cantidad);
+        final EditText edt_cantidad = (EditText) view.findViewById(R.id.edt_cantidad);
         final TextView txt_producto = (TextView) view.findViewById(R.id.txt_producto_seleccionado);
         lista_productos = (ListView) view.findViewById(R.id.lista_productos);
         btn_aceptar = (Button) view.findViewById(R.id.btn_aceptar);
@@ -64,7 +67,7 @@ public class VenderProducto extends DialogFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 productos.moveToPosition(position);
 
-                idProducto  = productos.getInt(0);
+                idProducto = productos.getInt(0);
                 nombreProducto = productos.getString(1);
                 precioProducto = productos.getDouble(3);
                 ivaProducto = productos.getDouble(4);
@@ -78,11 +81,8 @@ public class VenderProducto extends DialogFragment {
         });
 
 
-
-
-
         builder.setView(view)
-            .setCancelable(false);
+                .setCancelable(false);
 
         btn_aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,11 +97,11 @@ public class VenderProducto extends DialogFragment {
                     venta.setNombre_producto(nombreProducto);
                     venta.setCantidad(cantidad);
                     venta.setSubTotal(subTotal);
-                    if(cantidad <= stockProducto){
+                    if (cantidad <= stockProducto) {
                         Toast.makeText(getActivity(), "Stock Restante: " + (stockProducto - cantidad), Toast.LENGTH_SHORT).show();
                         exampleDialogListener.applyText(venta);
                         dismiss();
-                    }else{
+                    } else {
                         Toast.makeText(getActivity(), "Error de Cantidad", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -125,38 +125,40 @@ public class VenderProducto extends DialogFragment {
     public void onAttach(Context activity) {
         super.onAttach(activity);
         exampleDialogListener = (ExampleDialogListener) activity;
-        try{
+        try {
 
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " debe implementar ExampleDialogListener");
         }
     }
 
     // Aqui se ejecuta la funcion que tiene la pantalla principal
     // la funcion llamada en la pantalla principal, actualiza la lista
-    public interface ExampleDialogListener{
+    public interface ExampleDialogListener {
         void applyText(Venta venta);
     }
 
-    public void consultarProductos(){
+    public void consultarProductos() {
         listaProductos.clear(); // Limpiar todos lo datos que contenga la lista de productos
         // Crear un objeto cursor para almacenar todos los productos obtenidos de la base de datos
         productos = bdd.consultarProductos();
-        if(productos != null && productos.getCount() > 0){ // Comprobar que se hayan encontrado registros en la Base de Datos
+        if (productos != null && productos.getCount() > 0) { // Comprobar que se hayan encontrado registros en la Base de Datos
             // Ciclo Do-While para llenar la lista con los registros encontrados en la Base de Datos
-            do{
-                String id = productos.getString(0);
+            do {
+                int id = productos.getInt(0);
                 String nombre = productos.getString(1);
                 double precio = productos.getDouble(3);
-                listaProductos.add(id + "\nNombre: "+nombre+"\nPrecio: $ "+ precio); // Agregar un registro a la Lista
-                // Asignar un formato y el contenido al Adaptador de la lista
-                ArrayAdapter<String> adaptadorProductos = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, listaProductos);
-                // Asignar el adaptador a la Lista de Productos
-                lista_productos.setAdapter(adaptadorProductos);
+                double stock = productos.getDouble(5);
+                int cantidad = (int) stock;
+                listaProductos.add(new Producto(id, nombre, precio, cantidad)); // Agregar un registro a la Lista
                 System.out.println("Encontrado Producto: " + nombre);
-            }while(productos.moveToNext()); // Condicion para recorrer el cursor
+            } while (productos.moveToNext()); // Condicion para recorrer el cursor
 
-        }else{
+            // Asignar un formato y el contenido al Adaptador de la lista
+            VentaProductoAdapter adaptadorProductos = new VentaProductoAdapter(getContext(), listaProductos);
+            // Asignar el adaptador a la Lista de Productos
+            lista_productos.setAdapter(adaptadorProductos);
+        } else {
             // Mensaje para informar que no se encontraron registros en el Cursor
             Toast.makeText(getActivity(), "No existen Productos registrados", Toast.LENGTH_SHORT).show();
         }

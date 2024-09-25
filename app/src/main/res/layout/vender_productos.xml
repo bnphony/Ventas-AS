@@ -50,7 +50,8 @@
             <ListView
                 android:id="@+id/lista_productos"
                 android:layout_width="match_parent"
-                android:layout_height="163dp">
+                android:layout_height="163dp"
+                tools:listitem="@layout/venta_producto_item">
 
             </ListView>
 

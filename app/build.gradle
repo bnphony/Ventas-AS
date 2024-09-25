@@ -21,6 +21,7 @@ android {
         }
     }
 
+
 }
 
 dependencies {
@@ -33,6 +34,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     /* Libreria para los EditText con material design */
     implementation 'com.google.android.material:material:1.0.0'
+    /* Libreria para CircleImageView */
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 
 }
