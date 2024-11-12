@@ -1,7 +1,10 @@
 <div align="center">
-<h1 align="center">Proyecto muy bueno de ventas</h1>
+  <h1 align="center">Proyecto muy bueno de ventas</h1>
 </div>
-![GitHub](https://img.shields.io/github/last-commit/bnphony/Ventas-AS)
+<p align="center">
+ 
+  ![GitHub](https://img.shields.io/github/last-commit/bnphony/Ventas-AS)
+</p>
 
 [![Kotlin](https://img.shields.io/badge/Code-Kotlin-blueviolet)](https://kotlinlang.org/)
 [![LICENSE](https://img.shields.io/badge/Lisence-CC-%23e64545)](https://joseluisgs.dev/docs/license/)
