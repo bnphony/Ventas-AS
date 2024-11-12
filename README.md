@@ -5,7 +5,8 @@
 
 [![Kotlin](https://img.shields.io/badge/Code-Kotlin-blueviolet)](https://kotlinlang.org/)
 [![LICENSE](https://img.shields.io/badge/Lisence-CC-%23e64545)](https://joseluisgs.dev/docs/license/)
-![GitHub](https://img.shields.io/github/last-commit/joseluisgs/tenistas-rest-ktor-2022-2023)
+
+![GitHub](https://img.shields.io/github/last-commit/bnphony/Ventas-AS)
 
 ![imagen](./images/ktor.png)
 * Proyecto muy bueno de ventas
