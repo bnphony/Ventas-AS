@@ -23,9 +23,7 @@
 ## Arquitectura
 ## Endpoints
 ## Java
-## Testing
 ## Documentación
-## Recursos
 ## Autor
 ## Licencia de Uso
 Este repositorio y todo su contenido está licenciado bajo licencia **Creative Commons**. Por favor si compartes, usas o modificas este proyecto cita a su
