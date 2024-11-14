@@ -1,4 +1,5 @@
- * Proyecto muy bueno de ventas
+<h1>App Movil: System of Sales</h1>
+* Proyecto muy bueno de ventas
  ** Excelente ejemplo completo, aunque falta pulir algunas cosas
  - Inicio de sesion, mantiene activa la sesion
  - Creacion de una cuenta
