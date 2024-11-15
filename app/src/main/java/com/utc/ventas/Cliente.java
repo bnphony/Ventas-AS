@@ -1,7 +1,7 @@
 package com.utc.ventas;
 
 import androidx.annotation.NonNull;
-// COmentario en cliente para probrar el push
+
 public class Cliente {
     private int idCliente;
     private String nombreCliente;
