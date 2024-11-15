@@ -109,7 +109,7 @@ Funciones Principales:
 </table>
 <p>Probar la aplicación: </p>
 
-[Descargar la aplicación](https://github.com/bnphony/Ventas-AS/raw/main/img_ventas/app.apk)
+[Descargar la aplicación](https://github.com/bnphony/Ventas-AS/tree/master/img_ventas/app.apk)
 
 
 
