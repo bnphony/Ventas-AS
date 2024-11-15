@@ -107,7 +107,9 @@ Funciones Principales:
     
   </tr>
 </table>
-<p>Probar la aplicación, <a href="./img_ventas/app.apk">descargar</a></p>
+<p>Probar la aplicación: </p>
+
+[Descargar la aplicación](https://github.com/bnphony/Ventas-AS/img_ventas/app.apk)
 
 
 ## Autor
