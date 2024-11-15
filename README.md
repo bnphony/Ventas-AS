@@ -19,7 +19,10 @@ Funciones Principales:
  - CRUD ventas
  	-- Cuadro de Dialogo que afecta a la pantalla principal.
 ### Tecnologías
-
+- Lenguaje de Programación: ![Java](https://www.java.com/es/) - Lenguaje predeterminado de Android Studio.
+- Base de Datos: ![SQLite3](https://developer.android.com/tools/sqlite3?hl=es-419) - Administrar la base de datos de la aplicación.
+- Material Design: EditText - Android.material:1.0.0, ImageView - CircleImageView:3.1.0
+  
 ## Dominio
 
 
@@ -118,8 +121,16 @@ Codificado por [Bryan Jhoel Tarco Taipe](https://github.com/bnphony)
 
 ### Contacto
 <a href="https://www.linkedin.com/in/bryan-tarco01" rel="noopener noreferrer" target="_blank">
-  <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="Bryan Tarco" height="30" width="40" />
+  <img align="center" src="https://github.com/bnphony/Portafolio/blob/deployed/static/img/linkedin_icon.png" alt="LinkedIn" height="40" width="40" />
 </a>
+<a href="https://github.com/bnphony" rel="noopener noreferrer" target="blank">
+  <img align="center" src="https://github.com/bnphony/Portafolio/blob/deployed/static/img/github_icon.png" alt="GitHub" height="40" width="40" />
+</a>
+<a href="mailto: bryan.tarco01@gmail.com" target="_blank">
+  <img align="center" src="https://github.com/bnphony/Portafolio/blob/deployed/static/img/email_icon.png" alt="Email" height="40" width="40" />
+</a>
+
+
 
 ## Licencia de Uso
 Este repositorio y todo su contenido está licenciado bajo licencia **Creative Commons**. Por favor si compartes, usas o modificas este proyecto cita a su
