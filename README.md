@@ -19,10 +19,11 @@ Funciones Principales:
  - CRUD ventas
  	-- Cuadro de Dialogo que afecta a la pantalla principal.
 ### Tecnologías
+
 ## Dominio
-## Arquitectura
-## Endpoints
-## Java
+
+
+
 ## Funciones
 <table>
   <tr>
@@ -106,7 +107,7 @@ Funciones Principales:
     
   </tr>
 </table>
-<p>Probar la aplicación, <a href="#">descargar</a></p>
+<p>Probar la aplicación, <a href="./img_ventas/app.apk">descargar</a></p>
 
 
 ## Autor
