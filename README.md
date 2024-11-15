@@ -18,9 +18,11 @@ Funciones Principales:
  - CRUD productos
  - CRUD ventas
  	-- Cuadro de Dialogo que afecta a la pantalla principal.
+   
 ### Tecnologías
-- Lenguaje de Programación: ![Java](https://www.java.com/es/) - Lenguaje predeterminado de Android Studio.
-- Base de Datos: ![SQLite3](https://developer.android.com/tools/sqlite3?hl=es-419) - Administrar la base de datos de la aplicación.
+
+- Lenguaje de Programación: [Java](https://www.java.com/es/) - Lenguaje predeterminado de Android Studio.
+- Base de Datos: [SQLite3](https://developer.android.com/tools/sqlite3?hl=es-419) - Administrar la base de datos de la aplicación.
 - Material Design: EditText - Android.material:1.0.0, ImageView - CircleImageView:3.1.0
   
 ## Dominio
