@@ -1,5 +1,6 @@
 <div align="center">
-  <h1 align="center">Proyecto muy bueno de ventas</h1>
+  
+  # App Móvil para la Gestión de Ventas
 </div>
 
 <div align="center">
@@ -9,15 +10,30 @@
 </div>
 
 ## Indice
+- [App Móvil para la Gestión de Ventas](#app-móvil-para-la-gestión-de-ventas)
+  - [Descripción](#descripción)
+    - [Tecnologías](#tecnologías)
+  - [Dominio](#dominio)
+    - [Cliente](#cliente)
+    - [Producto](#producto)
+    - [Venta](#venta)
+    - [Productos Vendidos](#productos-vendidos)
+    - [Usuario](#usuario)
+  - [Funciones](#funciones)
+    - [Probar la Aplicación](#probar-la-aplicación)
+  - [Autor](#autor)
+    - [Contacto](#contacto)
+  - [Licencia de Uso](#licencia-de-uso)
 
 ## Descripción
 Este proyecto es una Aplicación Móvil para gestionar la venta de diferentes productos. Creada en Android Studio, desarrollada con lenguaje Java.
 Funciones Principales:
- - Inicio de sesión, mantiene activa la sesión
- - Creacion de una cuenta
- - CRUD productos
- - CRUD ventas
- 	-- Cuadro de Dialogo que afecta a la pantalla principal.
+ - Inicio de sesión, mantiene activa la sesión.
+ - Creación de una cuenta de usuario.
+ - CREATE, LIST, UPDATE, DELETE productos.
+ - CREATE, LIST, UPDATE, DELETE clientes.
+ - CREATE, LIST ventas.
+ - Cuadro de Dialogo que afecta a la pantalla principal.
    
 ### Tecnologías
 
@@ -42,8 +58,50 @@ Gestionar usuarios, productos, clientes y ventas, sabemos que:
 | apellido  | text   | Apellido del Cliente     |
 | cedula    | text   | Cédula del Cliente       |
 | telefono  | text   | Teléfono del Cliente     |
-| direccion | text   | Dirección del Cliente        |
+| direccion | text   | Dirección del Cliente    |
 
+### Producto
+
+| Campo       | Tipo   | Descripción                        |
+|-------------|--------|------------------------------------|  
+| id          | UUID   | Identificador único                |
+| nombre      | text   | Nombre del Producto                |
+| descripcion | text   | Descripción del Producto           |
+| precio      | real   | Precio del Producto                |
+| iva         | real   | IVA del Producto                   |
+| stock       | text   | Cantidad del Producto              |
+| f_caducidad | text   | Fecha de Caducidad del Producto    |
+
+### Venta
+
+| Campo       | Tipo    | Descripción                   |
+|-------------|---------|-------------------------------|
+| id          | UUID    | Identificador único           |
+| titulo      | text    | Título de la Venta            |
+| fecha       | text    | Fecha de la Venta             |
+| estado      | text    | Estado de la Venta            |
+| total       | real    | Precio Total de la Venta      |
+| observacion | text    | Observación de la Venta       |
+| fk_cliente  | Cliente | Cliente de la Venta (no nulo) |
+
+### Productos Vendidos
+
+| Campo       | Tipo     | Descripción                                      |
+|-------------|----------|--------------------------------------------------|
+| id          | UUID     | Identificador único                              |
+| cantidad    | real     | Cantidad del producto vendido                    |
+| sub_total   | real     | Precio Total de la Venta antes de aplicar el IVA |
+| fk_producto | Producto | Producto Vendido (no nulo)                       |
+| fk_venta    | Venta    | Venta del Producto (no nulo)                     |
+
+### Usuario
+
+| Campo    | Tipo | Descripción            |
+|----------|------|------------------------|
+| id       | UUID | Identificador único    |
+| nombre   | text | Nombre del Usuario     |
+| email    | text | Email del Usuario      |
+| password | text | Contraseña del Usuario |
 
 ## Funciones
 <table>
@@ -128,7 +186,8 @@ Gestionar usuarios, productos, clientes y ventas, sabemos que:
     
   </tr>
 </table>
-<p>Probar la aplicación: </p>
+
+### Probar la Aplicación
 
 [Descargar la aplicación](https://github.com/bnphony/Ventas-AS/tree/master/img_ventas/app.apk)
 
