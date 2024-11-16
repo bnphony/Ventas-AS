@@ -27,6 +27,22 @@ Funciones Principales:
   
 ## Dominio
 
+Gestionar usuarios, productos, clientes y ventas, sabemos que:
+- Un cliente puede comprar uno o varios productos.
+- Varios productos pueden ser vendido a un cliente en una sola venta.
+- Una Venta es realizada por un cliente y contiene varios productos.
+- Un usuario puede crearse una cuenta para acceder al sistema, iniciar sesión, crear productos, registrar clientes y registrar ventas.
+
+### Cliente
+
+| Campo     | Tipo   | Descripción              |
+|-----------|--------|--------------------------|
+| id        | UUID   | Identificador único      |
+| nombre    | text   | Nombre del Cliente       |
+| apellido  | text   | Apellido del Cliente     |
+| cedula    | text   | Cédula del Cliente       |
+| telefono  | text   | Teléfono del Cliente     |
+| direccion | text   | Dirección del Cliente        |
 
 
 ## Funciones
